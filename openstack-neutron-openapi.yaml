@@ -1,0 +1,1895 @@
+openapi: "3.0.3"
+info:
+  title: OpenStack API for RESTler fuzzing
+  version: "1.0.0"
+servers:
+  - url: http://10.30.9.6:9696
+paths:
+  /v2.0/networks:
+    post:
+      parameters:
+        - name: networkDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              network:
+                $ref: "#/components/schemas/networkRequest"
+      examples:
+        first_example:
+          parameters:
+            networkDetails:
+              network:
+                name: example-network
+                admin_state_up: true
+                mtu: 38
+
+      responses:
+        "201":
+          description: "network created"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  network:
+                    $ref: "#/components/schemas/networkResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      examples:
+        basic:
+          parameters: {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  networks:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/networkResponse"
+
+  /v2.0/networks/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      parameters:
+        - $ref: "#/components/parameters/fields"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  network:
+                    $ref: "#/components/schemas/networkResponse"
+
+    put:
+      parameters:
+        - name: networkDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              network:
+                $ref: "#/components/schemas/networkRequest"
+      examples:
+        first_example:
+          parameters:
+            networkDetails:
+              network:
+                name: updated-network-name
+                mtu: 1400
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  network:
+                    $ref: "#/components/schemas/networkResponse"
+
+    delete:
+      responses:
+        "204":
+          description: "network deleted"
+
+  /v2.0/subnets:
+    post:
+      parameters:
+        - name: subnetDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              subnet:
+                $ref: "#/components/schemas/subnetRequest"
+      examples:
+        basic:
+          parameters:
+            subnetDetails:
+              subnet:
+                name: example-subnet
+                ip_version: 6
+                network_id: 09acd0b3-6e2d-431e-8e3d-c09dd0c7adec
+                use_default_subnetpool: true
+
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnet:
+                    $ref: "#/components/schemas/subnetResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      examples:
+        basic:
+          parameters: {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/subnetResponse"
+
+  /v2.0/subnets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnet:
+                    $ref: "#/components/schemas/subnetResponse"
+
+    put:
+      parameters:
+        - name: subnetDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              subnet:
+                $ref: "#/components/schemas/subnetRequest"
+      examples:
+        first_example:
+          parameters:
+            subnetDetails:
+              subnet:
+                name: updated-subnet-name
+                enable_dhcp: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnet:
+                    $ref: "#/components/schemas/subnetResponse"
+
+    delete:
+      responses:
+        "204":
+          description: "subnet deleted"
+
+  /v2.0/ports:
+    post:
+      parameters:
+        - name: portDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              port:
+                $ref: "#/components/schemas/portRequest"
+      examples:
+        basic:
+          parameters:
+            portDetails:
+              port:
+                network_id: 09acd0b3-6e2d-431e-8e3d-c09dd0c7adec
+
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  port:
+                    $ref: "#/components/schemas/portResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      examples:
+        basic:
+          parameters: {}
+
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ports:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/portResponse"
+
+  /v2.0/ports/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  port:
+                    $ref: "#/components/schemas/portResponse"
+
+    put:
+      parameters:
+        - name: portDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              port:
+                $ref: "#/components/schemas/portRequest"
+      examples:
+        first_example:
+          parameters:
+            portDetails:
+              port:
+                name: updated-port-name
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  port:
+                    $ref: "#/components/schemas/portResponse"
+
+    delete:
+      responses:
+        "204":
+          description: "port deleted"
+
+  /v2.0/rbac-policies:
+    post:
+      parameters:
+        - name: rbacDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              rbac_policy:
+                $ref: "#/components/schemas/rbacRequest"
+      examples:
+        basic:
+          parameters:
+            rbacDetails:
+              rbac_policy:
+                target_tenant: 227face7ec2d4e36a0b7a9dbf404ac45
+                object_id: 09acd0b3-6e2d-431e-8e3d-c09dd0c7adec
+                object_type: network
+                action: access_as_shared
+
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rbac_policy:
+                    $ref: "#/components/schemas/rbacResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      examples:
+        basic:
+          parameters: {}
+
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rbac_policies:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/rbacResponse"
+
+  /v2.0/rbac-policies/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rbac_policy:
+                    $ref: "#/components/schemas/rbacResponse"
+
+    put:
+      parameters:
+        - name: rbacDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              rbac_policy:
+                $ref: "#/components/schemas/rbacRequest"
+
+      examples:
+        first_example:
+          parameters:
+            rbacDetails:
+              rbac_policy:
+                target_tenant: 227face7ec2d4e36a0b7a9dbf404ac45
+
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rbac_policy:
+                    $ref: "#/components/schemas/rbacResponse"
+
+    delete:
+      responses:
+        "204":
+          description: "rbac policy deleted"
+
+  /v2.0/address-scopes:
+    post:
+      parameters:
+        - name: addressScopeDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              address_scope:
+                $ref: "#/components/schemas/addressScopeRequest"
+      examples:
+        basic:
+          parameters:
+            addressScopeDetails:
+              address_scope:
+                ip_version: 6
+
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address_scope:
+                    $ref: "#/components/schemas/addressScopeResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      examples:
+        basic:
+          parameters: {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address_scopes:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/addressScopeResponse"
+
+  /v2.0/address-scopes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      parameters:
+        - $ref: "#/components/parameters/fields"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address_scope:
+                    type: object
+                    items:
+                      $ref: "#/components/schemas/addressScopeResponse"
+
+    put:
+      parameters:
+        - name: addressScopeDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              address_scope:
+                $ref: "#/components/schemas/addressScopeRequest"
+      examples:
+        first_example:
+          parameters:
+            addressScopeDetails:
+              address_scope:
+                name: updated-address-scope-name
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address_scope:
+                    $ref: "#/components/schemas/addressScopeResponse"
+
+    delete:
+      responses:
+        "204":
+          description: "address scope deleted"
+
+  /v2.0/floatingips:
+    post:
+      parameters:
+        - name: floatingIPDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              floatingip:
+                $ref: "#/components/schemas/floatingIPRequest"
+      examples:
+        basic:
+          parameters:
+            floatingIPDetails:
+              floatingip:
+                tenant_id: 227face7ec2d4e36a0b7a9dbf404ac45
+                project_id: 227face7ec2d4e36a0b7a9dbf404ac45
+                floating_network_id: 9a6f9697-1c15-46f8-a114-4681bdebf52b
+
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  floatingip:
+                    $ref: "#/components/schemas/floatingIPResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      # examples:
+      #   basic:
+      #     parameters: {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  floatingips:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/floatingIPResponse"
+
+  /v2.0/floatingips/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      parameters:
+        - $ref: "#/components/parameters/fields"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  floatingip:
+                    type: object
+                    items:
+                      $ref: "#/components/schemas/floatingIPResponse"
+
+    put:
+      parameters:
+        - name: floatingIPDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              floatingip:
+                $ref: "#/components/schemas/floatingIPRequest"
+      examples:
+        first_example:
+          parameters:
+            floatingIPDetails:
+              floatingip:
+                port_id: null
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  floatingip:
+                    $ref: "#/components/schemas/floatingIPRequest"
+
+    delete:
+      responses:
+        "204":
+          description: "floating ip deleted"
+
+  /v2.0/subnetpools:
+    post:
+      parameters:
+        - name: subnetPoolDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              subnetpool:
+                $ref: "#/components/schemas/subnetPoolRequest"
+      examples:
+        basic:
+          parameters:
+            subnetPoolDetails:
+              subnetpool:
+                name: example-subnetpool
+                tenant_id: 227face7ec2d4e36a0b7a9dbf404ac45
+                project_id: 227face7ec2d4e36a0b7a9dbf404ac45
+                prefixes:
+                  - 2001:db8::/64
+
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnetpool:
+                    $ref: "#/components/schemas/subnetPoolResponse"
+
+    get:
+      parameters:
+        - $ref: "#/components/parameters/sortKey"
+        - $ref: "#/components/parameters/sortDir"
+        - $ref: "#/components/parameters/pageLimit"
+        - $ref: "#/components/parameters/pageMarker"
+        - $ref: "#/components/parameters/pageReverse"
+        - $ref: "#/components/parameters/fields"
+      # examples:
+      #   basic:
+      #     parameters: {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnetpools:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/subnetPoolResponse"
+
+  /v2.0/subnetpools/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      parameters:
+        - $ref: "#/components/parameters/fields"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnetpool:
+                    type: object
+                    items:
+                      $ref: "#/components/schemas/subnetPoolResponse"
+
+    put:
+      parameters:
+        - name: subnetPoolDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              subnetpool:
+                $ref: "#/components/schemas/subnetPoolRequest"
+      examples:
+        first_example:
+          parameters:
+            subnetPoolDetails:
+              subnetpool:
+                port_id: null
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subnetpool:
+                    $ref: "#/components/schemas/subnetPoolRequest"
+
+    delete:
+      responses:
+        "204":
+          description: "subnet pool deleted"
+
+  /v2.0/security-groups:
+    post:
+      parameters:
+      - name: securityDetails
+        in: body
+        schema:
+          type: object
+          properties:
+            security_group:
+              $ref: "#/components/schemas/securityRequest"
+      examples:
+        first_example:
+          parameters:
+            securityDetails:
+              security_group:
+                name: example-securitygroup
+                description: testdingen
+                stateful: False
+
+      responses:
+        "201":
+          description: "security group created"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  security_group:
+                    $ref: "#/components/schemas/securityResponse"
+
+  /v2.0/security-groups/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+    get:
+      parameters:
+      - name: fields
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  security_group:
+                    $ref: "#/components/schemas/securityResponse"
+
+    put:
+      parameters:
+      - name: securityDetails
+        in: body
+        schema:
+          type: object
+          properties:
+            security_group:
+              $ref: "#/components/schemas/securityRequest"
+      examples:
+        first_example:
+          parameters:
+            securityDetails:
+              security_group:
+                name: updated-security-name
+                description: i-am-updated
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  security_group:
+                    $ref: "#/components/schemas/securityResponsePut"
+
+    delete:
+      responses:
+        "204":
+          description: "securitygroup deleted"
+
+  /v2.0/routers:
+    post:
+      parameters:
+        - name: routerDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              router:
+                $ref: "#/components/schemas/routerRequest"
+      examples:
+        first_example:
+          parameters:
+            routerDetails:
+              router:
+                name: example-router
+                description: testdingen
+                stateful: False
+
+      responses:
+        "201":
+          description: "router created"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerResponse"
+
+  /v2.0/routers/{id}/add_router_interface:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      parameters:
+        - name: addRouterInterfaceDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              subnet_id:
+                type: string
+                format: uuid
+              port_id:
+                type: string
+                format: uuid
+
+      examples:
+        first_example:
+          parameters:
+            addRouterInterfaceDetails:
+              subnet_id: cd06c52b-1a8c-464e-9841-f12bf5822db1
+
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerinterfaceResponse"
+
+  /v2.0/routers/{id}/remove_router_interface:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      parameters:
+        - name: removeRouterInterfaceDetails
+          in: body
+          schema:
+            type: string
+            properties:
+              subnet_id:
+                type: string
+                format: uuid
+              port_id:
+                type: string
+                format: uuid
+
+      examples:
+        first_example:
+          parameters:
+            removeRouterInterfaceDetails:
+              subnet_id: cd06c52b-1a8c-464e-9841-f12bf5822db1
+
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerinterfaceResponse"
+
+  /v2.0/routers/{id}/add_extraroutes:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      parameters:
+        - name: addExtraRoutesDetails
+          in: body
+          schema:
+            type: string
+            properties:
+              router:
+                $ref: "#/components/schemas/routerRoutePut"
+      examples:
+        first_example:
+          parameters:
+            addExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.1
+        second_example:
+          parameters:
+            addExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.2
+        third_example:
+          parameters:
+            addExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.3
+        fourt_example:
+          parameters:
+            addExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.4
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerRouteResponse"
+
+  /v2.0/routers/{id}/remove_extraroutes:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      parameters:
+        - name: removeExtraRoutesDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              routes:
+                $ref: "#/components/schemas/routerRoutePut"
+      examples:
+        first_example:
+          parameters:
+            removeExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.1
+        second_example:
+          parameters:
+            removeExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.2
+        third_example:
+          parameters:
+            removeExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.3
+        fourth_example:
+          parameters:
+            removeExtraRoutesDetails:
+              router:
+                routes:
+                - destination: 5.5.5.0/24
+                  nexthop: 192.168.44.4
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerRouteResponse"
+
+  /v2.0/routers/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerResponse"
+
+    put:
+      parameters:
+        - name: routerDetails
+          in: body
+          schema:
+            type: object
+            properties:
+              router:
+                $ref: "#/components/schemas/routerRequest"
+      examples:
+        first_example:
+          parameters:
+            routerDetails:
+              router:
+                name: updated-router-name
+                description: i-am-updated
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  router:
+                    $ref: "#/components/schemas/routerResponse"
+
+    delete:
+      responses:
+        "204":
+          description: "router deleted"
+
+security:
+  - xAuthToken: []
+
+components:
+  securitySchemes:
+    xAuthToken:
+      type: apiKey
+      name: X-Auth-Token
+      in: header
+
+  parameters:
+    fields:
+      name: fields
+      in: query
+      schema:
+        type: string
+        example: id
+    sortKey:
+      name: sort_key
+      in: query
+      schema:
+        type: string
+        example: id
+    sortDir:
+      name: sort_dir
+      in: query
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+    pageLimit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+    pageMarker:
+      name: marker
+      in: query
+      schema:
+        type: string
+    pageReverse:
+      name: page_reverse
+      in: query
+      schema:
+        type: boolean
+
+  schemas:
+    segment:
+      {
+        "type": "object",
+        "properties":
+          {
+            "provider:segmentation_id": { "type": "integer" },
+            "provider:physical_network": { "type": "string" },
+            "provider:network_type": { "type": "string" },
+          },
+      }
+    networkRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "admin_state_up": { "type": "boolean" },
+            "mtu": { "type": "integer" },
+            "provider:network_type":
+              { "type": "string", "enum": ["vxlan", "flat", "vlan"] },
+            "provider:segmentation_id": { "type": "integer" },
+            "provider:physical_network": { "type": "string" },
+            "segments":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/segment" },
+              },
+          },
+      }
+      # "dns_domain": { "type": "string" }, // Not supported by our installation. Missing dns-integration extension.
+      # "qos_policy_id": { "type": "string" }, // Not supported by our installation. Missing dns-integration extension.
+    networkResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "admin_state_up": { "type": "boolean" },
+            "availability_zone_hints":
+              { "type": "array", "items": { "type": "string" } },
+            "availability_zones":
+              { "type": "array", "items": { "type": "string" } },
+            "created_at": { "type": "string", "format": "date-time" },
+            "dns_domain": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+            "ipv4_address_scope": { "type": "string" },
+            "ipv6_address_scope": { "type": "string" },
+            "l2_adjacency": { "type": "boolean" },
+            "mtu": { "type": "integer" },
+            "name": { "type": "string" },
+            "provider:physical_network": { "type": "string" },
+            "port_security_enabled": { "type": "boolean" },
+            "project_id": { "type": "string" },
+            "qos_policy_id": { "type": "string" },
+            "revision_number": { "type": "integer" },
+            "router:external": { "type": "boolean" },
+            "shared": { "type": "boolean" },
+            "status": { "type": "string" },
+            "subnets":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/subnetResponse" },
+              },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "tenant_id": { "type": "string" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "vlan_transparent": { "type": "boolean" },
+            "description": { "type": "string" },
+            "provider:network_type": { "type": "string" },
+            "is_default": { "type": "boolean" },
+            "provider:segmentation_id": { "type": "integer" },
+          },
+      }
+
+    allocationPool:
+      {
+        "type": "object",
+        "properties":
+          {
+            "start":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "end":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.10", "ipv6": "2001:db8::10" },
+              },
+          },
+      }
+
+    subnetResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "enable_dhcp": { "type": "boolean" },
+            "network_id": { "type": "string", "format": "uuid" },
+            "segment_id": { "type": "string" },
+            "project_id": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "dns_nameservers":
+              {
+                "type": "array",
+                "items":
+                  {
+                    "type": "string",
+                    "examples":
+                      { "ipv4": "10.23.45.0/24", "ipv6": "2001:db8::/32" },
+                  },
+              },
+            "dns_publish_fixed_ip": { "type": "boolean" },
+            "allocation_pools":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/allocationPool" },
+              },
+            "host_routes":
+              {
+                "type": "array",
+                "items":
+                  {
+                    "type": object,
+                    "properties":
+                      {
+                        "destination": { "type": "string" },
+                        "nexthop": { "type": "string" },
+                      },
+                  },
+              },
+            "ip_version": { "type": "integer", "enum": [4, 6] },
+            "cidr":
+              {
+                "type": "string",
+                "examples":
+                  { "ipv4": "10.23.45.0/24", "ipv6": "2001:db8::/32" },
+              },
+            "gateway_ip":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "id": { "type": "string", "format": "uuid" },
+            "description": { "type": "string" },
+            "ipv6_address_mode":
+              {
+                "type": "string",
+                "enum": ["slaac", "dhcpv6-stateful", "dhcpv6-stateless"],
+              },
+            "ipv6_ra_mode":
+              {
+                "type": "string",
+                "enum": ["slaac", "dhcpv6-stateful", "dhcpv6-stateless"],
+              },
+            "revision_number": { "type": "integer" },
+            "service_types": { "type": "array", "items": {} },
+            "subnetpool_id": { "type": "string", "format": "uuid" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+          },
+      }
+
+    subnetRequest: { "type": "object", "properties": {
+            "network_id": { "type": "string", "format": "uuid" },
+            "ip_version": { "type": "integer", "enum": [4, 6] },
+            "enable_dhcp": { "type": "boolean" },
+            "use_default_subnetpool": { "type": "boolean" },
+            "cidr":
+              {
+                "type": "string",
+                "examples":
+                  { "ipv4": "10.23.45.0/24", "ipv6": "2001:db8::/32" },
+              },
+            "gateway_ip":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "project_id": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            # "dns_publish_fixed_ip": { "type": "boolean" },
+            # "segment_id": { "type": "string" },
+            "description": { "type": "string" },
+            "service_types": { "type": "array", "items": {} },
+            "subnetpool_id": { "type": "string", "format": "uuid" },
+            "ipv6_address_mode":
+              {
+                "type": "string",
+                "enum": ["slaac", "dhcpv6-stateful", "dhcpv6-stateless"],
+              },
+            "ipv6_ra_mode":
+              {
+                "type": "string",
+                "enum": ["slaac", "dhcpv6-stateful", "dhcpv6-stateless"],
+              },
+            "name": { "type": "string" },
+            "prefixlen": { "type": "integer" },
+            "dns_nameservers":
+              {
+                "type": "array",
+                "items":
+                  {
+                    "type": "string",
+                    "examples":
+                      { "ipv4": "10.23.45.0/24", "ipv6": "2001:db8::/32" },
+                  },
+              },
+            "allocation_pools":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/allocationPool" },
+              },
+            "host_routes":
+              {
+                "type": "array",
+                "items":
+                  {
+                    "type": object,
+                    "properties":
+                      {
+                        "destination": { "type": "string" },
+                        "nexthop": { "type": "string" },
+                      },
+                  },
+              },
+          } }
+
+    portRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "admin_state_up": { "type": "boolean" },
+            "name": { "type": "string" },
+            "network_id": { "type": "string", "format": "uuid" },
+            "port_security_enabled": { "type": "boolean" },
+            "allowed_address_pairs":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/allowedAddressPair" },
+              },
+          },
+      }
+
+    portResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "admin_state_up": { "type": "boolean" },
+            "allowed_address_pairs":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/allowedAddressPair" },
+              },
+            "created_at": { "type": "string", "format": "date-time" },
+            "data_plane_status": { "type": "string" },
+            "description": { "type": "string" },
+            "device_id": { "type": "string" },
+            "device_owner": { "type": "string" },
+            "dns_assignment":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/dnsAssignment" },
+              },
+            "extra_dhcp_opts":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/extraDHCPOpt" },
+              },
+            "fixed_ips":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/fixedIP" },
+              },
+            "id": { "type": "string", "format": "uuid" },
+            "ip_allocation": { "type": "string" },
+            "mac_address": { "type": "string" },
+            "name": { "type": "string" },
+            "network_id": { "type": "string", "format": "uuid" },
+            "port_security_enabled": { "type": "boolean" },
+            "project_id": { "type": "string" },
+            "revision_number": { "type": "integer" },
+            "security_groups":
+              {
+                "type": "array",
+                "items": { "type": "string", "format": "uuid" },
+              },
+            "status": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "tenant_id": { "type": "string" },
+            "updated_at": { "type": "string", "format": "date-time" },
+          },
+      }
+
+    dnsAssignment:
+      {
+        "type": "object",
+        "properties":
+          {
+            "hostname": { "type": "string" },
+            "ip_address": { "type": "string" },
+            "fqdn": { "type": "string" },
+          },
+      }
+
+    extraDHCPOpt:
+      {
+        "type": "object",
+        "properties":
+          {
+            "opt_value": { "type": "string" },
+            "ip_version": { "type": "integer" },
+            "opt_name": { "type": "string" },
+          },
+      }
+
+    fixedIP:
+      {
+        "type": "object",
+        "properties":
+          {
+            "ip_address": { "type": "string" },
+            "subnet_id": { "type": "string", "format": "uuid" },
+          },
+      }
+
+    allowedAddressPair:
+      {
+        "type": "object",
+        "properties":
+          {
+            "ip_address": { "type": "string" },
+            "mac_address": { "type": "string" },
+          },
+      }
+
+    rbacRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "action":
+              {
+                "type": "string",
+                "enum": ["access_as_shared", "access_as_external"],
+              },
+            "object_type": { "type": "string", "enum": [
+                    "network",
+                    "security-group",
+                    "subnetpool",
+                    # "address-scope",
+                    # "address-group",
+                    "qos-policy",
+                    "security_group", # this makes the api 500
+                  ] },
+            "target_tenant":
+              {
+                "type": "string",
+                "examples":
+                  { "default-tenant": "227face7ec2d4e36a0b7a9dbf404ac45" },
+              },
+            "object_id":
+              {
+                "type": "string",
+                "format": "uuid",
+                "examples":
+                  { "default-network": "09acd0b3-6e2d-431e-8e3d-c09dd0c7adec" },
+              },
+          },
+      }
+
+    rbacResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "target_tenant":
+              {
+                "type": "string",
+                "examples":
+                  { "default-tenant": "227face7ec2d4e36a0b7a9dbf404ac45" },
+              },
+            "tenant_id": { "type": "string" },
+            "object_type": { "type": "string", "enum": [
+                    "network",
+                    "security-group",
+                    "subnetpool",
+                    # "address-scope",
+                    # "address-group",
+                    # "qos-policy",
+                    "security_group", # this makes the api 500
+                  ] },
+            "object_id":
+              {
+                "type": "string",
+                "format": "uuid",
+                "examples":
+                  { "default-network": "09acd0b3-6e2d-431e-8e3d-c09dd0c7adec" },
+              },
+            "action":
+              {
+                "type": "string",
+                "enum": ["access_as_shared", "access_as_external"],
+              },
+            "project_id": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+          },
+      }
+
+    addressScopeResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "ip_version": { "type": "integer", "enum": [4, 6] },
+            "shared": { "type": "boolean" },
+            "project_id": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+          },
+      }
+
+    addressScopeRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "ip_version": { "type": "integer", "enum": [4, 6] },
+            "shared": { "type": "boolean" },
+            "project_id": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+          },
+      }
+
+    portDetails:
+      {
+        "type": "object",
+        "properties":
+          {
+            "status": { "type": "string" },
+            "name": { "type": "string" },
+            "admin_state_up": { "type": "boolean" },
+            "network_id": { "type": "string", "format": "uuid" },
+            "device_owner": { "type": "string" },
+            "mac_address": { "type": "string" },
+            "device_id": { "type": "string", "format": "uuid" },
+          },
+      }
+
+    portForwardingResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "protocol": { "type": "string" },
+            "internal_ip_address": { "type": "string" },
+            "internal_port": { "type": "integer" },
+            "external_port": { "type": "integer" },
+            "description": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+          },
+      }
+
+    floatingIPResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "floating_network_id": { "type": "string", "format": "uuid" },
+            "router_id": { "type": "string", "format": "uuid" },
+            "fixed_ip_address":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "floating_ip_address":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "project_id": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "status": { "type": "string" },
+            "port_id": { "type": "string", "format": "uuid" },
+            "id": { "type": "string", "format": "uuid" },
+            "description": { "type": "string" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "revision_number": { "type": "integer" },
+            "port_details": { "$ref": "#/components/schemas/portDetails" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "port_forwardings":
+              {
+                "type": "array",
+                "items":
+                  { "$ref": "#/components/schemas/portForwardingResponse" },
+              },
+          },
+      }
+
+    floatingIPRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "floating_network_id": { "type": "string", "format": "uuid" },
+            "port_id": { "type": "string", "format": "uuid" },
+            "subnet_id": { "type": "string", "format": "uuid" },
+            "fixed_ip_address":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "floating_ip_address":
+              {
+                "type": "string",
+                "examples": { "ipv4": "10.23.45.1", "ipv6": "2001:db8::1" },
+              },
+            "description": { "type": "string" },
+          },
+      }
+
+    subnetPoolResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "min_prefixlen": { "type": "string", "format": "integer" },
+            "address_scope_id": { "type": "string" },
+            "default_prefixlen": { "type": "string", "format": "integer" },
+            "id": { "type": "string", "format": "uuid" },
+            "max_prefixlen": { "type": "string", "format": "integer" },
+            "name": { "type": "string" },
+            "default_quota": { "type": "integer" },
+            "is_default": { "type": "boolean" },
+            "project_id": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "prefixes": { "type": "array", "items": { "type": "string" } },
+            "ip_version": { "type": "integer" },
+            "shared": { "type": "boolean" },
+            "description": { "type": "string" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "revision_number": { "type": "integer" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+          },
+      }
+
+    subnetPoolRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "prefixes": { "type": "array", "items": { "type": "string" } },
+            "default_prefixlen": { "type": "integer" },
+            "min_prefixlen": { "type": "integer" },
+            "max_prefixlen": { "type": "integer" },
+            "shared": { "type": "string", "format": "boolean" },
+          },
+      }
+
+    securityRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "stateful": { "type": "boolean" },
+          },
+      }
+    securityResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "description": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+            "name": { "type": "string" },
+            "security_group_rules":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/SecurityGroupRule" },
+              },
+            "project_id": { "type": "string" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "revision_number": { "type": "integer" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "tenant_id": { "type": "string" },
+            "stateful": { "type": "boolean" },
+          },
+      }
+
+    SecurityGroupRule:
+      {
+        "type": "object",
+        "properties":
+          {
+            "direction": { "type": "string" },
+            "ethertype": { "type": "string" },
+            "id": { "type": "string", "format": "uuid" },
+            "port_range_max": { "type": "integer" },
+            "port_range_min": { "type": "integer" },
+            "protocol": { "type": "integer" },
+            "remote_group_id": { "type": "integer" },
+            "remote_ip_prefix": { "type": "integer" },
+            "security_group_id": { "type": "string", "format": "uuid" },
+            "project_id": { "type": "string" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "revision_number": { "type": "integer" },
+            "revisio[n_number": { "type": "integer" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "tenant_id": { "type": "string" },
+            "description": { "type": "string" },
+          },
+      }
+    securityResponsePut:
+      {
+        "type": "object",
+        "properties":
+          {
+            "security_group_rules":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/SecurityGroupRule" },
+              },
+            "project_id": { "type": "string" },
+            "revision_number": { "type": "integer" },
+            "tenant_id": { "type": "string" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "id": { "type": "string", "format": "uuid" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "stateful": { "type": "boolean" },
+          },
+      }
+
+    routerRequest:
+      {
+        "type": "object",
+        "properties":
+          {
+            "name": { "type": "string" },
+            "external_gateway_info":
+              { "$ref": "#/components/schemas/ExternalGatewayInfo" },
+            "admin_state_up": { "type": "boolean" },
+          },
+      }
+    routerResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "admin_state_up": { "type": "boolean" },
+            "availability_zone_hints": { "type": "array", "items": {} },
+            "availability_zones":
+              { "type": "array", "items": { "type": "string" } },
+            "created_at": { "type": "string", "format": "date-time" },
+            "description": { "type": "string" },
+            "distributed": { "type": "boolean" },
+            "external_gateway_info":
+              { "$ref": "#/components/schemas/ExternalGatewayInfo" },
+            "flavor_id": { "type": "string", "format": "uuid" },
+            "ha": { "type": "boolean" },
+            "id": { "type": "string", "format": "uuid" },
+            "name": { "type": "string" },
+            "routes": { "type": "array", "items": {} },
+            "revision_number": { "type": "integer" },
+            "status": { "type": "string" },
+            "updated_at": { "type": "string", "format": "date-time" },
+            "project_id": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "service_type_id": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "conntrack_helpers": { "type": "array", "items": {} },
+          },
+      }
+
+    ExternalGatewayInfo:
+      {
+        "type": "object",
+        "properties":
+          {
+            "network_id": { "type": "string", "format": "uuid" },
+            "enable_snat": { "type": "boolean" },
+            "external_fixed_ips":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/ExternalFixedIP" },
+              },
+          },
+      }
+    ExternalFixedIP:
+      {
+        "type": "object",
+        "properties":
+          {
+            "ip_address": { "type": "string" },
+            "subnet_id": { "type": "string", "format": "uuid" },
+          },
+      }
+    routerinterfaceResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "id": { "type": "string", "format": "uuid" },
+            "network_id": { "type": "string", "format": "uuid" },
+            "port_id": { "type": "string", "format": "uuid" },
+            "subnet_id": { "type": "string", "format": "uuid" },
+            "subnet_ids":
+              {
+                "type": "array",
+                "items": { "type": "string", "format": "uuid" },
+              },
+            "project_id": { "type": "string" },
+            "tenant_id": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+          },
+      }
+    routerRoutePut:
+      {
+        "type": "object",
+        "properties":
+          {
+            "routes":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Route" },
+              },
+          },
+      }
+    Route:
+      {
+        "type": "object",
+        "properties":
+          {
+            "destination": { "type": "string", "format": "ipv4" },
+            "nexthop": { "type": "string", "format": "ipv4" },
+          },
+      }
+    routerRouteResponse:
+      {
+        "type": "object",
+        "properties":
+          {
+            "id": { "type": "string", "format": "uuid" },
+            "name": { "type": "string" },
+            "routes":
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Route" },
+              },
+          },
+      }
